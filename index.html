@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Perayaan Spesial Untukmu</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- GSAP for Smooth Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deepRose: '#C2185B',
+            dustyPink: '#E8A7B1',
+            champagneGold: '#D4AF37',
+            warmWhite: '#FFFDF8',
+            softCream: '#F7F4EE',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+            cormorant: ['Cormorant Garamond', 'serif'],
+            outfit: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Premium Glassmorphism styling */
+    .glass-panel {
+      background: rgba(255, 253, 248, 0.75);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 20px 40px 0 rgba(194, 24, 91, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+    }
+
+    .glass-card {
+      background: rgba(255, 253, 248, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 20px;
+    }
+
+    /* Premium buttons with touch feedback */
+    .btn-premium {
+      background: linear-gradient(135deg, #FFFDF8 0%, #F7F4EE 100%);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 4px 15px rgba(194, 24, 91, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-premium:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212, 175, 55, 0.8);
+      box-shadow: 0 12px 24px rgba(194, 24, 91, 0.12), 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-premium:active {
+      transform: translateY(1px);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #C2185B 0%, #E8A7B1 100%);
+      color: #FFFDF8;
+      box-shadow: 0 8px 20px rgba(194, 24, 91, 0.25);
+    }
+
+    ::-webkit-scrollbar { display: none; }
+    html, body {
+      scrollbar-width: none;
+      overflow: hidden;
+      height: 100%;
+      background-color: #FFFDF8;
+    }
+
+    #effect-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      width: 150vw;
+      height: 150vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 167, 177, 0.18) 0%, rgba(212, 175, 55, 0.05) 50%, rgba(255, 253, 248, 0) 100%);
+      top: -30%;
+      left: -25%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Floating Game Hearts */
+    .game-spark {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 40;
+      border-radius: 50%;
+      background: rgba(255, 253, 248, 0.5);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(194, 24, 91, 0.3);
+      box-shadow: 0 8px 16px rgba(194, 24, 91, 0.1);
+      animation: floatSpark 3s ease-in-out infinite alternate;
+    }
+    @keyframes floatSpark {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-20px) scale(1.08); }
+    }
+  </style>
+</head>
+<body class="font-outfit select-none overflow-hidden relative text-neutral-800 antialiased flex justify-center items-center h-full w-full">
+
+  <!-- Ambient Luxury Lights -->
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow" style="top: auto; bottom: -30%; left: auto; right: -25%; background: radial-gradient(circle, rgba(194, 24, 91, 0.12) 0%, rgba(212, 175, 55, 0.05) 60%, rgba(255, 253, 248, 0) 100%);"></div>
+
+  <!-- Background Canvas for Falling Hearts/Sakura -->
+  <canvas id="effect-canvas"></canvas>
+
+  <!-- Global Controller Bar -->
+  <div id="control-bar" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between w-[90%] max-w-[380px] glass-card px-4 py-3 opacity-0 pointer-events-none transition-opacity duration-500">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-deepRose animate-pulse"></span>
+      <span class="text-[11px] font-outfit uppercase tracking-[0.15em] text-neutral-500 font-medium">Seseorang yang Spesial</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="btn-music-toggle" class="w-8 h-8 rounded-full flex items-center justify-center text-neutral-600 hover:text-deepRose active:scale-90 transition-all">
+        <i data-lucide="music-4" class="w-4 h-4"></i>
+      </button>
+      <div class="h-4 w-[1px] bg-neutral-300"></div>
+      <button id="btn-volume-toggle" class="w-8 h-8 rounded-full flex items-center justify-center text-neutral-600 hover:text-deepRose active:scale-90 transition-all">
+        <i data-lucide="volume-2" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER (HP Frame on Desktop) -->
+  <main id="app-container" class="relative w-full h-full max-w-[420px] max-h-[900px] md:h-[90%] md:aspect-[9/19.5] md:rounded-[36px] md:border-[10px] md:border-neutral-900 md:shadow-2xl overflow-hidden flex flex-col justify-center items-center z-25 bg-softCream/30">
+
+    <!-- Screen 0: Music Permission Prompt -->
+    <section id="screen-prompt" class="absolute inset-0 flex flex-col justify-center items-center px-8 z-50 bg-softCream/95 backdrop-blur-md">
+      <div class="text-center space-y-6 max-w-xs">
+        <div class="w-16 h-16 bg-dustyPink/20 rounded-full flex items-center justify-center mx-auto text-deepRose animate-bounce">
+          <i data-lucide="music" class="w-8 h-8"></i>
+        </div>
+        <div class="space-y-2">
+          <h2 class="font-playfair text-3xl text-neutral-800">Menyiapkan Kejutan</h2>
+          <p class="text-medium text-neutral-500 leading-relaxed font-light">
+            Ketuk tombol di bawah ini untuk memutar musik.
+          </p>
+        </div>
+        <button id="btn-allow-music" class="btn-premium btn-accent w-full py-3.5 rounded-full text-xs font-semibold tracking-wider uppercase inline-flex items-center justify-center gap-2">
+          <span>Putar & Mulai</span>
+          <i data-lucide="play-circle" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Screen 1: Opening & Loading Screen -->
+    <section id="screen-opening" class="absolute inset-0 flex flex-col justify-center items-center px-6 z-40 bg-softCream/80 backdrop-blur-md hidden opacity-0">
+      <div class="text-center space-y-6 max-w-sm">
+        <p id="opening-subtitle" class="text-xs uppercase tracking-[0.25em] text-neutral-500 font-medium opacity-0">Ada yang spesial nih..</p>
+        <h1 id="opening-title" class="font-playfair text-3xl md:text-5xl text-neutral-800 leading-relaxed font-light opacity-0">
+          Khusus <br><span class="italic font-normal text-deepRose">hanya</span> buat kamu...
+        </h1>
+        <div id="opening-loader" class="pt-8 opacity-0 flex flex-col items-center gap-3">
+          <div class="w-12 h-[1px] bg-neutral-200 relative overflow-hidden">
+            <div class="absolute h-full w-1/2 bg-deepRose rounded" id="loader-bar"></div>
+          </div>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-neutral-600">Tunggu sebentar ya</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 2: Interaction Game -->
+    <section id="screen-game-simple" class="absolute inset-0 flex flex-col justify-between py-16 px-6 z-30 hidden opacity-0 bg-transparent">
+      <div class="text-center space-y-6 mt-4">
+        <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-deepRose"></span>
+        <h2 class="font-playfair text-3xl text-neutral-800">Sentuhan Kehangatan</h2>
+        <p class="text-medium text-neutral-500 font-light max-w-[280px] mx-auto leading-relaxed">
+          Ketuk <span class="font-medium text-deepRose">3 hati merah muda</span> yang melayang untuk mengumpulkan energi kasih sayang.
+        </p>
+      </div>
+
+      <!-- Play Area Zone -->
+      <div id="game-zone" class="relative w-full h-[320px] my-auto border border-dashed border-neutral-200/60 rounded-2xl bg-white/10 backdrop-blur-[2px]"></div>
+
+      <div class="text-center space-y-4">
+        <div class="text-medium font-outfit uppercase tracking-widest text-neutral-400">
+          Energi Terkumpul: <span id="spark-counter" class="text-deepRose font-semibold">0</span> / 3
+        </div>
+        <div id="game-action" class="opacity-0 scale-95 pointer-events-none transition-all duration-500">
+          <button id="btn-to-gift" class="btn-premium btn-accent px-8 py-3.5 rounded-full text-xs font-semibold tracking-wider uppercase inline-flex items-center gap-2">
+            <span>Buka Hadiah</span>
+            <i data-lucide="gift" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 3: Gift Box & Emerging Flower Bouquet -->
+    <section id="screen-gift" class="absolute inset-0 flex flex-col justify-between py-12 px-6 z-25 hidden opacity-0 bg-transparent">
+      <div class="text-center space-y-20 mt-4">
+        <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-deepRose">Tanda Terima Kasih</span>
+        <h2 class="font-playfair text-2xl text-neutral-800">Ketuk kado untuk Membukanya</h2>
+      </div>
+
+      <div class="flex items-center justify-center my-auto relative w-full h-[320px]">
+        
+        <!-- Interactive Gift Box Outer -->
+        <div id="gift-box" class="w-48 h-48 cursor-pointer relative flex items-center justify-center transition-transform hover:scale-105 duration-300 z-10">
+          <div class="absolute w-40 h-40 bg-dustyPink/30 rounded-2xl filter blur-xl animate-pulse"></div>
+          
+          <div class="relative w-36 h-36 flex items-center justify-center">
+            <!-- Box Lid -->
+            <div id="gift-lid" class="absolute top-0 w-36 h-10 bg-gradient-to-r from-deepRose to-pink-600 rounded-lg shadow-md z-10 transition-all duration-700" style="transform-origin: top;">
+              <div class="absolute inset-x-0 mx-auto w-6 h-full bg-champagneGold"></div>
+              <div class="absolute -top-4 inset-x-0 mx-auto w-10 h-6 bg-champagneGold rounded-full flex items-center justify-center shadow-sm">
+                <div class="w-2 h-2 rounded-full bg-white"></div>
+              </div>
+            </div>
+            <!-- Box Body -->
+            <div id="gift-body" class="absolute bottom-0 w-32 h-28 bg-gradient-to-r from-deepRose/95 to-pink-700/95 rounded-b-xl shadow-lg flex items-center justify-center">
+              <div class="absolute inset-y-0 mx-auto w-6 h-full bg-champagneGold"></div>
+            </div>
+            <div id="gift-light" class="absolute w-24 h-24 bg-yellow-100 rounded-full filter blur-md opacity-0 scale-50 transition-all duration-1000"></div>
+          </div>
+        </div>
+
+        <!-- Pop-up Flower Bouquet Element -->
+        <div id="flower-bouquet" class="absolute scale-0 opacity-0 pointer-events-none z-20 flex flex-col items-center justify-center text-center">
+          <div class="w-44 h-44 drop-shadow-xl animate-bounce" style="animation-duration: 3s;">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <path d="M50 85 L35 45 Q50 35 65 45 Z" fill="#E8A7B1" />
+              <path d="M50 85 L25 45 Q50 50 75 45 Z" fill="#F7F4EE" opacity="0.8" />
+              <circle cx="50" cy="65" r="3" fill="#D4AF37" />
+              <path d="M44 80 Q50 75 56 80 Q50 85 44 80" fill="#C2185B" />
+              <circle cx="50" cy="80" r="2.5" fill="#D4AF37" />
+              <path d="M35 45 Q20 30 30 25 Q35 30 35 45" fill="#6B8E23" />
+              <path d="M65 45 Q80 30 70 25 Q65 30 65 45" fill="#6B8E23" />
+              <path d="M50 45 Q50 20 40 25 Q45 35 50 45" fill="#556B2F" />
+              <circle cx="50" cy="38" r="12" fill="#C2185B" />
+              <circle cx="50" cy="38" r="8" fill="#E8A7B1" />
+              <circle cx="50" cy="38" r="4" fill="#C2185B" />
+              <circle cx="36" cy="42" r="10" fill="#E8A7B1" />
+              <circle cx="36" cy="42" r="6" fill="#C2185B" />
+              <circle cx="36" cy="42" r="3" fill="#E8A7B1" />
+              <circle cx="64" cy="42" r="10" fill="#E8A7B1" />
+              <circle cx="64" cy="42" r="6" fill="#C2185B" />
+              <circle cx="64" cy="42" r="3" fill="#E8A7B1" />
+              <circle cx="48" cy="24" r="3" fill="#D4AF37" />
+              <circle cx="58" cy="26" r="3" fill="#D4AF37" />
+              <circle cx="30" cy="32" r="3" fill="#D4AF37" />
+              <circle cx="70" cy="32" r="3" fill="#D4AF37" />
+            </svg>
+          </div>
+          <span class="mt-2 text-xs font-medium text-deepRose tracking-wider bg-white/80 px-3 py-1 rounded-full shadow-sm">Buket Bunga Cantik Untukmu! 🌸</span>
+        </div>
+
+      </div>
+
+      <div class="text-center" id="gift-instruction-text">
+        <p class="text-medium text-neutral-700 font-light max-w-[280px] mx-auto">
+          Ketuk kotak kado di atas untuk melepas pitanya dan melihat apa yang tumbuh di dalamnya.
+        </p>
+      </div>
+    </section>
+
+    <!-- Screen 4: Halaman Amplop & Kotak Surat yang Sudah Diberi Kebebasan Tinggi -->
+    <section id="screen-envelope" class="absolute inset-0 flex flex-col justify-between py-6 px-4 z-20 hidden opacity-0 bg-transparent">
+      
+      <!-- Judul atas tetap kecil agar tidak memakan tempat -->
+      <div class="text-center space-y-1 mt-4 transition-all" id="envelope-header">
+        <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-deepRose">Surat yang Tulus</span>
+        <h2 class="font-playfair text-xl text-neutral-800">Tulisan untuk Dirimu</h2>
+      </div>
+
+      <!-- KONTEN UTAMA: Diubah menjadi h-full & items-stretch agar modal bisa melar penuh ke atas-bawah -->
+      <div class="flex-1 flex items-center justify-center relative w-full my-4">
+        
+        <!-- Amplop bawaan tetap di tengah sebelum diklik -->
+        <div id="envelope" class="relative w-64 h-44 bg-gradient-to-br from-pink-500 via-deepRose to-pink-700 border border-champagneGold/50 rounded-lg shadow-xl cursor-pointer flex items-center justify-center overflow-visible z-20">
+          <div id="envelope-flap" class="absolute top-0 left-0 w-full h-0 border-t-[88px] border-t-pink-600 border-x-[128px] border-x-transparent origin-top z-30 transition-transform duration-700"></div>
+          
+          <div id="letter-preview" class="absolute w-[240px] h-[150px] bg-warmWhite rounded shadow-md z-10 flex flex-col justify-between p-4 transition-all duration-1000 transform translate-y-2 scale-95 overflow-hidden">
+            <div class="space-y-1">
+              <div class="h-2 w-12 bg-deepRose/20 rounded"></div>
+              <div class="h-2 w-28 bg-neutral-300 rounded"></div>
+              <div class="h-2 w-20 bg-neutral-200 rounded"></div>
+            </div>
+            <div class="text-[9px] text-white-700 text-right tracking-widest font-serif italic">Ketuk untuk membuka</div>
+          </div>
+
+          <div class="absolute inset-0 border-r-[128px] border-r-transparent border-b-[176px] border-b-pink-800/80 border-l-[128px] border-l-transparent z-20 rounded-b-lg"></div>
+          <div class="absolute inset-0 border-l-[128px] border-l-pink-700/90 border-b-[176px] border-b-transparent z-20 rounded-l-lg"></div>
+          <div class="absolute inset-0 border-r-[128px] border-r-pink-700/90 border-b-[176px] border-b-transparent z-20 rounded-lg"></div>
+          
+          <div class="absolute w-8 h-8 rounded-full bg-champagneGold border border-yellow-200 shadow z-30 flex items-center justify-center">
+            <i data-lucide="heart" class="w-4 h-4 text-deepRose fill-current"></i>
+          </div>
+        </div>
+
+        <!-- 
+          KOTAK SURAT UTAMA (MODAL)
+          Sekarang menggunakan inset-0 h-full w-full agar langsung mengambil 
+          seluruh area merah dari atas sampai bawah layar HP Anda tanpa terpotong!
+        -->
+        <div id="full-letter-modal" class="absolute inset-0 w-full h-full z-40 hidden opacity-0 flex flex-col justify-center items-center">
+          <div class="glass-panel p-6 w-full h-full overflow-y-auto flex flex-col justify-between space-y-4">
+            <div class="space-y-4">
+              <div class="flex justify-between items-center border-b border-neutral-700/50 pb-2">
+                <span class="font-playfair text-4xl italic text-deepRose">Hay,</span>
+                <span class="text-[12px] uppercase tracking-wider text-neutral-700 font-medium font-cormorant">21 Juli 2026</span>
+              </div>
+              
+              <!-- Tempat teks mengalir secara dinamis -->
+              <div class="font-outfit text-neutral-700 leading-relaxed space-y-2 text-left" id="letter-content">
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+              <button id="btn-to-gallery" class="btn-premium px-5 py-2.5 rounded-full text-[10px] font-semibold tracking-widest uppercase inline-flex items-center gap-2 text-deepRose opacity-0 pointer-events-none">
+                <span>Lihat Galery</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bagian petunjuk bawah -->
+      <div class="text-center mb-2" id="envelope-footer">
+        <p class="text-medium text-neutral-700 font-light max-w-[280px] mx-auto">
+          Ketuk amplop merah muda di atas untuk melepas segel dan membaca surat ucapan Anda.
+        </p>
+      </div>
+    </section>
+
+
+    <!-- Screen 5: Photo Gallery -->
+    <section id="screen-gallery" class="absolute inset-0 flex flex-col justify-between py-12 px-6 z-15 hidden opacity-0 bg-transparent">
+      <div class="text-center space-y-8 mt-4">
+        <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-deepRose">Galeri Foto</span>
+        <h2 class="font-playfair text-2xl text-neutral-800">Galery Fotomu</h2>
+      </div>
+
+      <div class="my-auto relative w-full flex items-center justify-center h-[340px]">
+        <div id="gallery-card-wrapper" class="relative w-[280px] h-[340px] flex items-center justify-center"></div>
+        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-2 text-neutral-400 text-[10px] uppercase tracking-widest pointer-events-none">
+          <i data-lucide="arrow-left-right" class="w-3.5 h-3.5 animate-pulse"></i>
+          <span>Geser Kartu</span>
+        </div>
+      </div>
+
+      <div class="text-center space-y-4">
+        <div class="flex justify-center items-center gap-2">
+          <span id="gallery-counter" class="text-lg font-outfit text-neutral-400 tracking-widest">1 / 10</span>
+        </div>
+        <button id="btn-to-final" class="btn-premium px-8 py-3 rounded-full text-[10px] font-semibold tracking-wider uppercase inline-flex items-center gap-2">
+          <span>Selanjutnya</span>
+          <i data-lucide="sparkles" class="w-4 h-4 text-champagneGold"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Screen 6: Final Celebration Page -->
+    <section id="screen-final" class="absolute inset-0 flex flex-col justify-between py-12 px-6 z-10 hidden opacity-0 bg-transparent">
+      <div class="text-center mt-6">
+        <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-neutral-400">Harapan Terbaik</span>
+      </div>
+
+      <div class="text-center space-y-4 my-auto">
+        <div class="relative inline-block">
+          <div class="absolute -top-8 -left-8 w-12 h-12 bg-pink-100 rounded-full filter blur-lg animate-pulse"></div>
+          <p class="font-playfair italic text-3xl text-deepRose font-light">Selamat Ulang Tahun,</p>
+        </div>
+        <h1 id="receiver-name-display" class="font-outfit text-4xl md:text-5xl font-light tracking-wide text-neutral-800 pt-2 pb-6">
+          NAMA PENERIMA
+        </h1>
+        <div class="w-16 h-[1px] bg-champagneGold mx-auto"></div>
+        <p class="text-lg text-neutral-700 max-w-[280px] mx-auto leading-relaxed font-light">
+          Semoga hari ini mengawalimu menuju tahun yang penuh keteduhan, kedamaian, dan dikelilingi oleh kasih yang tulus.
+        </p>
+      </div>
+
+      <div class="text-center">
+        <button id="btn-one-more-thing" class="btn-premium btn-accent px-8 py-4 rounded-full text-xs font-semibold tracking-widest uppercase inline-flex items-center gap-2">
+          <span>Satu Hal Lagi...</span>
+          <i data-lucide="heart" class="w-4 h-4 fill-current"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Screen 7: Emotional Ending -->
+    <section id="screen-ending" class="absolute inset-0 flex flex-col justify-center items-center px-8 z-5 bg-softCream/90 backdrop-blur-lg hidden opacity-0">
+      <div class="text-center space-y-8 max-w-sm">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-warmWhite border border-champagneGold/30 shadow-lg" id="ending-icon">
+          <i data-lucide="feather" class="w-6 h-6 text-deepRose"></i>
+        </div>
+        
+        <div class="space-y-6">
+          <p id="ending-text-1" class="font-outfit text-xl md:text-2xl text-neutral-700 italic leading-relaxed opacity-0 transform translate-y-4">
+            "Terima kasih sudah hadir di cerita hidupku."
+          </p>
+          <p id="ending-text-2" class="font-outfit text-xl md:text-2xl text-neutral-700 italic leading-relaxed opacity-0 transform translate-y-4">
+            "Semoga semesta selalu mempertemukanmu dengan hal-hal baik."
+          </p>
+          <p id="ending-text-3" class="font-outfit text-xl md:text-2xl text-neutral-700 italic leading-relaxed opacity-0 transform translate-y-4">
+            "Dan semoga setiap langkahmu selalu dipenuhi kebahagiaan."
+          </p>
+        </div>
+        <div id="ending-decor" class="w-12 h-[1px] bg-neutral-300 mx-auto opacity-0"></div>
+        
+        <button id="btn-to-absolute-finish" class="btn-premium px-6 py-2.5 rounded-full text-[10px] font-semibold tracking-widest uppercase inline-flex items-center gap-2 text-deepRose opacity-0">
+          <span>Selesai</span>
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Screen 8: True Final Page -->
+    <section id="screen-absolute-finish" class="absolute inset-0 flex flex-col justify-center items-center px-8 z-2 bg-gradient-to-b from-[#FFFDF8] to-[#FFF5F6] hidden opacity-0">
+      <div class="text-center space-y-8 max-w-sm">
+        <div class="flex items-center justify-center gap-4 text-5xl animate-pulse">
+          <span>💖</span>
+          <span class="text-6xl">❤️</span>
+          <span>✨</span>
+        </div>
+
+        <div class="space-y-3">
+          <h2 class="font-playfair text-2xl text-neutral-800">Menyimpan Kehangatan Hari Ini</h2>
+          <p class="text-lg text-neutral-700 leading-relaxed font-light max-w-[260px] mx-auto">
+            Semoga harimu penuh warna. Website ini bisa ditutup sekarang, tapi doa-doa baik untukmu akan terus berjalan.
+          </p>
+        </div>
+
+        <div class="w-16 h-[1px] bg-champagneGold mx-auto"></div>
+
+        <button id="btn-close-app" class="btn-premium btn-accent px-10 py-4 rounded-full text-xs font-semibold tracking-widest uppercase inline-flex items-center gap-2">
+          <span>Tutup & Selesai</span>
+          <i data-lucide="x-circle" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* ==========================================
+       1. GLOBAL CONFIGURATIONS
+       ========================================== */
+    const RECEIVER_NAME = "Ari Tri Yulianingsih"; 
+    const AUDIO_URL = "fromtismomen.mp3"; 
+
+    const GALLERY_DATA = [
+      { url: "Foto1.jpg", caption: "Tatapan yang menenangkan." },
+      { url: "Foto 2.jpg", caption: "Anggun dalam diam." },
+      { url: "Foto 3.jpg", caption: "Senyummu, bahagiaku." },
+      { url: "foto12.jpg", caption: "Lembut namun memikat." },
+      { url: "Foto 4.jpg", caption: "Pesona yang tak pernah pudar." },
+      { url: "Foto9.jpg", caption: "Manis dengan caranya sendiri." },
+      { url: "Foto10.jpg", caption: "Selalu berhasil mencuri perhatian." },
+      { url: "Foto11.jpg", caption: "Bahagiamu adalah pemandangan terindah." },
+      { url: "Foto5.jpg", caption: "Kehadiran yang dirindukan." },
+      { url: "Foto6.jpg", caption: "Tawamu menenangkan jiwa ." }
+    ];
+
+    const LETTER_PARAGRAPHS = [
+      "Selamat hari lahir.",
+      "Semoga Allah senantiasa melimpahkan kesehatan, kebahagiaan, umur yang penuh berkah, mengabulkan setiap doa dan harapan terbaikmu, serta setiap langkahmu dimudahkan, hatimu dipenuhi ketenangan, dan selalu dikelilingi orang-orang yang menyayangimu.",
+      "Terima kasih telah menjadi seseorang yang meninggalkan kesan baik dalam hidupku. Senyummu dan kenangan sederhana yang pernah ada akan selalu menjadi bagian dari cerita yang indah.",
+      "Selamat bertambah usia.",
+      "Tetaplah menjadi pribadi sehangat dan seindah yang selama ini aku kenal.",
+      "Semoga hari-harimu selalu dipenuhi kebahagiaan dan keberkahan.",
+      
+      "Aamiin."
+    ];
+
+    lucide.createIcons();
+    const audio = new Audio(AUDIO_URL);
+    audio.loop = true;
+    let isMusicPlaying = false;
+    let isMuted = false;
+
+    /* ==========================================
+       2. CANVAS BACKGROUND ANIMATION (OPASITAS DIPERLEMBUT)
+       ========================================== */
+    const canvas = document.getElementById('effect-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class FloatingHeart {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 50;
+        this.size = Math.random() * 8 + 6;
+        this.speed = Math.random() * 0.8 + 0.4;
+        this.angle = Math.random() * Math.PI * 2;
+        this.wobble = Math.random() * 0.5 + 0.2;
+        this.wobbleSpeed = Math.random() * 0.02 + 0.01;
+        // DIUBAH: Opasitas hati diperkecil agar sangat tipis di latar belakang (0.05 sampai 0.15)
+        this.alpha = Math.random() * 0.10 + 0.05;
+      }
+      update() {
+        this.y -= this.speed;
+        this.angle += this.wobbleSpeed;
+        this.x += Math.sin(this.angle) * this.wobble;
+        if (this.y < -20) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.fillStyle = '#C2185B';
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-this.size/2, -this.size/2, -this.size, -this.size/3, -this.size, 0);
+        ctx.bezierCurveTo(-this.size, this.size/2, -this.size/2, this.size, 0, this.size * 1.3);
+        ctx.bezierCurveTo(this.size/2, this.size, this.size, this.size/2, this.size, 0);
+        ctx.bezierCurveTo(this.size, -this.size/3, this.size/2, -this.size/2, 0, 0);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class SakuraPetal {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -Math.random() * 50;
+        this.size = Math.random() * 7 + 5;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.spin = Math.random() * 0.02 - 0.01;
+        this.angle = Math.random() * Math.PI * 2;
+        // DIUBAH: Opasitas kelopak sakura diperkecil agar tipis dan elegan (0.08 sampai 0.20)
+        this.alpha = Math.random() * 0.12 + 0.08;
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX + Math.sin(this.angle) * 0.2;
+        this.angle += this.spin;
+        if (this.y > canvas.height + 20) this.reset();
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = '#E8A7B1';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size * 0.8, this.size * 1.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(25, Math.floor(window.innerWidth / 15));
+      for (let i = 0; i < count; i++) {
+        particles.push(new FloatingHeart());
+        particles.push(new SakuraPetal());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    initParticles();
+    animateParticles();
+
+    /* ==========================================
+       3. MUSIC PLAYER LOGIC
+       ========================================== */
+    const musicBtn = document.getElementById('btn-music-toggle');
+    const volumeBtn = document.getElementById('btn-volume-toggle');
+    const controlBar = document.getElementById('control-bar');
+
+    function playMusic() {
+      audio.play().then(() => { isMusicPlaying = true; updateMusicUI(); }).catch(() => {});
+    }
+    function toggleMusic() {
+      isMusicPlaying ? audio.pause() : audio.play();
+      isMusicPlaying = !isMusicPlaying;
+      updateMusicUI();
+    }
+    function toggleMute() {
+      isMuted = !isMuted;
+      audio.muted = isMuted;
+      updateVolumeUI();
+    }
+    function updateMusicUI() {
+      musicBtn.innerHTML = isMusicPlaying ? `<i data-lucide="pause" class="w-4 h-4 text-deepRose animate-pulse"></i>` : `<i data-lucide="play" class="w-4 h-4 text-neutral-600"></i>`;
+      lucide.createIcons();
+    }
+    function updateVolumeUI() {
+      volumeBtn.innerHTML = isMuted ? `<i data-lucide="volume-x" class="w-4 h-4 text-neutral-400"></i>` : `<i data-lucide="volume-2" class="w-4 h-4 text-deepRose"></i>`;
+      lucide.createIcons();
+    }
+    musicBtn.addEventListener('click', toggleMusic);
+    volumeBtn.addEventListener('click', toggleMute);
+
+    /* ==========================================
+       4. SCREEN TRANSITIONS
+       ========================================== */
+    function transitionScreen(fromSelector, toSelector, delay = 0, onComplete = null) {
+      const fromEl = document.querySelector(fromSelector);
+      const toEl = document.querySelector(toSelector);
+      gsap.to(fromEl, {
+        opacity: 0, y: -15, duration: 0.8, delay: delay, ease: "power2.inOut",
+        onComplete: () => {
+          fromEl.classList.add('hidden');
+          toEl.classList.remove('hidden');
+          gsap.fromTo(toEl, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", onComplete });
+        }
+      });
+    }
+
+    /* ==========================================
+       5. INITIAL MUSIC DIALOGUE & LOAD
+       ========================================== */
+    document.getElementById('btn-allow-music').addEventListener('click', () => {
+      playMusic();
+      controlBar.classList.remove('pointer-events-none', 'opacity-0');
+      
+      transitionScreen('#screen-prompt', '#screen-opening', 0, () => {
+        document.getElementById('receiver-name-display').textContent = RECEIVER_NAME;
+        gsap.timeline()
+          .to('#opening-subtitle', { opacity: 1, duration: 1, delay: 0.5 })
+          .to('#opening-title', { opacity: 1, duration: 1.5, y: 0 }, "-=0.5")
+          .to('#opening-loader', { opacity: 1, duration: 1 }, "-=0.5")
+          .to('#loader-bar', { left: '100%', duration: 5, ease: "power1.inOut" })
+          .call(() => {
+            transitionScreen('#screen-opening', '#screen-game-simple', 0.3, spawnSparks);
+          });
+      });
+    });
+
+    /* ==========================================
+       6. INTERACTION GAME: CATCH THE HEARTS
+       ========================================== */
+    let sparksCollected = 0;
+    function spawnSparks() {
+      const zone = document.getElementById('game-zone');
+      zone.innerHTML = '';
+      sparksCollected = 0;
+      document.getElementById('spark-counter').textContent = 0;
+
+      for (let i = 0; i < 3; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'game-spark';
+        
+        const topPos = 20 + Math.random() * 60;
+        const leftPos = 15 + Math.random() * 70;
+        spark.style.top = `${topPos}%`;
+        spark.style.left = `${leftPos}%`;
+        
+        spark.innerHTML = `<i data-lucide="heart" class="w-6 h-6 text-deepRose fill-current animate-pulse"></i>`;
+        
+        gsap.from(spark, { scale: 0, opacity: 0, duration: 0.6, delay: i * 0.2, ease: "back.out(1.5)" });
+
+        spark.addEventListener('click', function() {
+          if (this.style.pointerEvents === 'none') return;
+          this.style.pointerEvents = 'none';
+          
+          sparksCollected++;
+          document.getElementById('spark-counter').textContent = sparksCollected;
+
+          gsap.to(this, {
+            scale: 1.8, opacity: 0, duration: 0.4, ease: "power2.out",
+            onComplete: () => this.remove()
+          });
+
+          confetti({ particleCount: 15, angle: 90, spread: 45, origin: { y: 0.5 } });
+
+          if (sparksCollected === 3) {
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+            const actionBtn = document.getElementById('game-action');
+            actionBtn.classList.remove('pointer-events-none', 'opacity-0', 'scale-95');
+          }
+        });
+
+        zone.appendChild(spark);
+      }
+      lucide.createIcons();
+    }
+
+    document.getElementById('btn-to-gift').addEventListener('click', () => {
+      transitionScreen('#screen-game-simple', '#screen-gift');
+    });
+
+    /* ==========================================
+       7. GIFT BOX & POP-UP BOUQUET
+       ========================================== */
+    document.getElementById('gift-box').addEventListener('click', function() {
+      if (this.style.pointerEvents === 'none') return;
+      this.style.pointerEvents = 'none';
+
+      gsap.timeline()
+        .to('#gift-lid', { y: -100, rotation: 30, opacity: 0, duration: 1.2, ease: "back.out(1.5)" })
+        .to('#gift-light', { scale: 3, opacity: 0.8, duration: 0.8, ease: "power2.out" }, "-=0.8")
+        .call(() => {
+          confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+        })
+        .to('#flower-bouquet', { 
+          scale: 1.1, 
+          opacity: 1, 
+          duration: 1.2, 
+          ease: "elastic.out(1, 0.7)",
+          pointerEvents: 'auto' 
+        }, "-=0.2")
+        .to(['#gift-body', '#gift-instruction-text'], { opacity: 0, duration: 0.5 }, "+=1.5")
+        .call(() => {
+          transitionScreen('#screen-gift', '#screen-envelope', 0.5);
+        }, null, "+=0.3");
+    });
+
+    /* ==========================================
+       8. ENVELOPE & FADE IN LOVE LETTER
+       ========================================== */
+    document.getElementById('envelope').addEventListener('click', () => {
+      gsap.timeline()
+        .to('#envelope-flap', { transform: 'rotateX(180deg)', duration: 0.8, ease: "power2.inOut" })
+        .to('#letter-preview', { y: -100, scale: 0.80, duration: 0.8, ease: "power3.out" }, "-=0.2")
+        .to(['#envelope-header', '#envelope-footer', '#envelope'], { opacity: 0, duration: 0.5, stagger: 0.1 }, "+=0.3")
+        .call(() => {
+          document.getElementById('full-letter-modal').classList.remove('hidden');
+          gsap.to('#full-letter-modal', { opacity: 1, duration: 0.8 });
+          displayFadeInLetter();
+        });
+    });
+
+    function displayFadeInLetter() {
+      const content = document.getElementById('letter-content');
+      content.innerHTML = '';
+
+      LETTER_PARAGRAPHS.forEach(text => {
+        const p = document.createElement('p');
+        p.className = 'opacity-0 translate-y-0 transform font-outfit text-xl md:text-2xl text-neutral-800 leading-relaxed font-light';
+        p.textContent = text;
+        content.appendChild(p);
+      });
+
+      gsap.to('#letter-content p', {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        stagger: 0.25,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.to('#btn-to-gallery', { opacity: 1, y: 0, duration: 0.8, pointerEvents: 'auto' });
+        }
+      });
+    }
+
+    document.getElementById('btn-to-gallery').addEventListener('click', () => {
+      transitionScreen('#screen-envelope', '#screen-gallery', 0, initGallery);
+    });
+
+    /* ==========================================
+       9. GALLERY CAROUSEL
+       ========================================== */
+    let currentGalleryIdx = 0;
+    function initGallery() { renderGalleryCards(); }
+
+    function renderGalleryCards() {
+      const wrapper = document.getElementById('gallery-card-wrapper');
+      wrapper.innerHTML = '';
+      
+      GALLERY_DATA.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'absolute w-full h-full transition-all duration-500 cursor-pointer select-none';
+        
+        const diff = index - currentGalleryIdx;
+        const absDiff = Math.abs(diff);
+        let transformStyle = `translateX(${diff * 40}px) scale(${1 - (absDiff * 0.08)}) rotate(${diff * 3}deg)`;
+        
+        card.style.transform = transformStyle;
+        card.style.zIndex = 10 - absDiff;
+        card.style.opacity = diff === 0 ? 1 : absDiff === 1 ? 0.6 : 0.2;
+
+        card.innerHTML = `
+          <div class="w-full h-full glass-card p-4 flex flex-col justify-between shadow-lg">
+            <div class="relative w-full h-[72%] rounded-xl overflow-hidden bg-neutral-100">
+              <img src="${data.url}" class="w-full h-full object-cover pointer-events-none" alt="Memory Frame">
+              <div class="absolute bottom-2 right-2 bg-black/40 backdrop-blur-sm text-[9px] text-white px-2.5 py-1 rounded-full font-mono">${index + 1} / 10</div>
+            </div>
+            <div class="pt-3 pb-1">
+              <p class="font-outfit text-base md:text-lg text-neutral-700 italic font-medium text-center">"${data.caption}"</p>
+            </div>
+          </div>
+        `;
+
+        let startX = 0;
+        card.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+        card.addEventListener('touchend', (e) => {
+          const dist = e.changedTouches[0].clientX - startX;
+          if (Math.abs(dist) > 40) navigateGallery(dist > 0 ? -1 : 1);
+        });
+        card.addEventListener('click', () => { if (diff !== 0) navigateGallery(diff); });
+        wrapper.appendChild(card);
+      });
+      document.getElementById('gallery-counter').textContent = `${currentGalleryIdx + 1} / 10`;
+    }
+
+    function navigateGallery(step) {
+      const next = currentGalleryIdx + step;
+      if (next >= 0 && next < GALLERY_DATA.length) {
+        currentGalleryIdx = next;
+        renderGalleryCards();
+      }
+    }
+
+    document.getElementById('btn-to-final').addEventListener('click', () => {
+      transitionScreen('#screen-gallery', '#screen-final');
+    });
+
+    /* ==========================================
+       10. FINAL SCREEN & ENDING SIGNATURE
+       ========================================== */
+    document.getElementById('btn-one-more-thing').addEventListener('click', () => {
+      const end = Date.now() + 2000;
+      (function frame() {
+        confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 } });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      }());
+      
+      transitionScreen('#screen-final', '#screen-ending', 0, () => {
+        gsap.timeline()
+          .to('#ending-icon', { scale: 1.1, repeat: 1, yoyo: true, duration: 1 })
+          .to('#ending-text-1', { opacity: 1, y: 0, duration: 1.2 })
+          .to('#ending-text-2', { opacity: 1, y: 0, duration: 1.2 }, "+=0.4")
+          .to('#ending-text-3', { opacity: 1, y: 0, duration: 1.2 }, "+=0.4")
+          .to('#ending-decor', { opacity: 1, scaleX: 1.5, duration: 0.8 }, "+=0.2")
+          .to('#btn-to-absolute-finish', { opacity: 1, y: 0, duration: 1, pointerEvents: 'auto' }, "+=0.3");
+      });
+    });
+
+    /* ==========================================
+       11. TRUE ABSOLUTE FINISH PAGE
+       ========================================== */
+    document.getElementById('btn-to-absolute-finish').addEventListener('click', () => {
+      transitionScreen('#screen-ending', '#screen-absolute-finish', 0, () => {
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.5 }
+        });
+      });
+    });
+
+    document.getElementById('btn-close-app').addEventListener('click', () => {
+      gsap.to('#app-container', {
+        opacity: 0,
+        scale: 0.95,
+        duration: 1.5,
+        ease: "power3.inOut",
+        onComplete: () => {
+          document.body.innerHTML = `
+            <div class="text-center p-8 space-y-4 max-w-sm animate-fade-in" style="font-family: 'Playfair Display', serif;">
+              <p class="text-2xl text-deepRose italic">✨ Halaman ditutup dengan indah ✨</p>
+              <p class="text-lg text-neutral-500 font-light font-outfit">Terima kasih sudah baca sampai selesai.</p>
+            </div>
+          `;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
